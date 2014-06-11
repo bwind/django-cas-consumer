@@ -1,6 +1,6 @@
 
 from setuptools import setup, find_packages
- 
+
 setup(
     name='django-cas-consumer',
     version='0.1dev',
@@ -10,5 +10,4 @@ setup(
     url='http://nitron.org/',
     packages=find_packages(),
     zip_safe=False,
-    install_requires=['setuptools'],
 )
