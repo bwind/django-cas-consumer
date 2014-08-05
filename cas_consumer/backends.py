@@ -3,10 +3,6 @@ from urlparse import urljoin
 
 from django.conf import settings
 
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
-
 __all__ = ['CASBackend']
 
 service = settings.CAS_SERVICE
@@ -47,10 +43,11 @@ class CASBackend(object):
         username = _verify_cas1(ticket, service)
         if not username:
             return None
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
         try:
             user = User.objects.get(username=username)
         except User.DoesNotExist:
-            # user will have an "unusable" password (thanks to James Bennett)
             user = User(username=username)
             user.save()
         if settings.CAS_USERINFO_CALLBACK is not None:
@@ -59,6 +56,8 @@ class CASBackend(object):
 
     def get_user(self, user_id):
         """Retrieve the user's entry in the User model if it exists"""
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
         try:
             return User.objects.get(pk=user_id)
         except User.DoesNotExist:
